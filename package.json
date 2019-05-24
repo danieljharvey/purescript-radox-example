@@ -13,6 +13,8 @@
     "pscid": "pscid",
     "webpack": "webpack --mode development --progress",
     "webpack:watch": "webpack --mode development --progress --watch",
-    "webpack-dev-server": "DEBUG=* webpack-dev-server --mode development --progress --inline --hot"
+    "webpack-dev-server": "DEBUG=* webpack-dev-server --mode development --progress --inline --hot",
+    "start": "yarn webpack-dev-server"
+  
   }
 }
