@@ -1,10 +1,9 @@
 module Main where
 
-import Prelude
-
+import Prelude (Unit, bind, pure, void, ($))
 import Effect (Effect)
 
-import Data.Maybe (Maybe(..), fromJust, fromMaybe)
+import Data.Maybe (fromJust)
 
 import Web.HTML.HTMLDocument (toNonElementParentNode) as DOM
 import Web.DOM.NonElementParentNode (getElementById) as DOM
@@ -15,12 +14,13 @@ import Partial.Unsafe (unsafePartial)
 
 import React as React
 import ReactDOM as ReactDOM
-import React.DOM as DOM
+
+import App.Data.RootReducer (reducer)
+import App.Components.Homepage
 
 main :: Effect Unit
 main = void $ do
   window <- DOM.window
-
   document <- DOM.document window
 
   let
@@ -31,16 +31,18 @@ main = void $ do
   let
       element' = unsafePartial (fromJust element)
 
-  ReactDOM.render (React.createLeafElement mainClass { }) element'
+  ReactDOM.render (React.createLeafElement app { }) element'
 
-mainClass :: React.ReactClass { }
-mainClass = React.component "Main" component
+-- this app just sets up the Puredux Provider, which allows everything within 
+-- to access the store data
+app :: React.ReactClass { }
+app = React.component "Main" component
   where
-  component this =
-    pure { state: {}
-         , render: pure render
-         }
-    where
-    render
-      = DOM.p [] [ DOM.text "hello world" ]
-
+    component this' = do
+        pure $ { state: { }
+               , render: pure render'
+               }
+    render'  
+      = React.createLeafElement reducer.provider
+          { children: [ React.createLeafElement homepage { title: "Hello!" } ] }
+        
