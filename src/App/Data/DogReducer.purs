@@ -1,10 +1,12 @@
 module App.Data.DogReducer where
 
-
 import App.Data.Types (DogState(..), State)
 import Puredux.Internal.Types
 
--- here are our second actions
+-- ahoy, here is a reducer that is in charge of the data side of
+-- fetching dog pictures. The actual AJAX stuff etc lives in the Actions
+-- file
+
 data Dogs
   = LoadNewDog
   | GotNewDog String

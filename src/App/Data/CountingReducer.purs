@@ -5,6 +5,8 @@ import Prelude ((+), (-))
 import App.Data.Types (State)
 import Puredux.Internal.Types
 
+-- ahoy, welcome to the world's shittest reducer
+
 -- here are our second actions
 data Counting
   = Up

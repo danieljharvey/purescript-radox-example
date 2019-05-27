@@ -20,6 +20,13 @@ import Puredux (liftAction')
 endpoint :: String
 endpoint = "https://dog.ceo/api/breeds/image/random"
 
+-- we've avoided having our reducers doing any side effects,
+-- so how do we *do* things?
+-- since we are able to do Effect things in event handlers
+-- let's make Actions that take the dispatch function and use it
+-- to save things in the store as we go
+
+-- this gets a nice dog picture
 fetchImage :: (LiftedAction -> Effect Unit) -> Effect Unit
 fetchImage dispatch = do
   dispatch (liftAction' LoadNewDog)
@@ -36,7 +43,9 @@ fetchImage dispatch = do
                 -> liftEffect $ dispatch (liftAction' (GotNewDog dog.message)) 
   pure unit
 
-
+-- this does a mock login
+-- demonstrating we don't need Aff if we don't want to
+-- do anything complicated
 login 
   :: (LiftedAction -> Effect Unit)
   -> String
