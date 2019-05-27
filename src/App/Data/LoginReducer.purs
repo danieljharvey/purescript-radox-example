@@ -1,7 +1,7 @@
 module App.Data.LoginReducer where
 
 import App.Data.Types (State)
-import Puredux.Internal.Types
+import Radox
 
 -- here are our first actions
 data Login

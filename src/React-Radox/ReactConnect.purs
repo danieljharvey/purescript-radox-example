@@ -1,22 +1,19 @@
-module Puredux.Connect where
+module Radox.ReactConnect where
   
 import Prelude (Unit, bind, pure, ($))
 import Effect (Effect)
 import React as React
-import Puredux (createStore, emptyStore)
-import Puredux.Internal.Types
+import Radox
 
--- This section is full of components to use Puredux with Purescript React
-
-type Puredux action state
+type ReactRadoxContext action state
   = { provider :: React.ReactClass { children :: Array React.ReactElement }
     , connect  :: (forall props localState
                 . React.ReactThis props localState
-               -> PureduxRenderMethod props state localState action
+               -> ReactRadoxRenderMethod props state localState action
                -> Effect React.ReactElement)
     }
 
-type PureduxRenderMethod props state localState action 
+type ReactRadoxRenderMethod props state localState action 
   = (
       { props :: props
       , localState :: localState
@@ -25,24 +22,24 @@ type PureduxRenderMethod props state localState action
       } -> React.ReactElement
     ) 
 
-createPuredux 
+createRadoxContext
   :: forall action state
    . CombinedReducer action state
   -> state
-  -> Puredux action state
-createPuredux reducer initialState =
+  -> ReactRadoxContext action state
+createRadoxContext reducer initialState =
   let myContext = React.createContext (emptyStore initialState)
-  in  { provider : pureduxProvider myContext reducer initialState
-      , connect  : pureduxConnect myContext
+  in  { provider : radoxProvider myContext reducer initialState
+      , connect  : radoxConnect myContext
       }
       
-pureduxProvider 
+radoxProvider 
   :: forall action state
-   . React.Context (Store' action state)
+   . React.Context (RadoxStore action state)
   -> CombinedReducer action state 
   -> state
   -> React.ReactClass { children :: Array React.ReactElement }
-pureduxProvider context combinedReducer initialState 
+radoxProvider context combinedReducer initialState 
   = React.pureComponent "Provider" component
   where
     listener 
@@ -72,13 +69,13 @@ pureduxProvider context combinedReducer initialState
               }
               props.children
 
-pureduxConnect 
+radoxConnect 
   :: forall props localState action state
-   . React.Context (Store' action state)
+   . React.Context (RadoxStore action state)
   -> React.ReactThis props localState
-  -> PureduxRenderMethod props state localState action
+  -> ReactRadoxRenderMethod props state localState action
   -> Effect React.ReactElement
-pureduxConnect context this renderer = do
+radoxConnect context this renderer = do
   props <- React.getProps this
   localState <- React.getState this
   let render { state, dispatch } 

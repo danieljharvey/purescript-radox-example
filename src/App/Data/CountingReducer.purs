@@ -3,7 +3,7 @@ module App.Data.CountingReducer where
 import Prelude ((+), (-))
 
 import App.Data.Types (State)
-import Puredux.Internal.Types
+import Radox
 
 -- ahoy, welcome to the world's shittest reducer
 

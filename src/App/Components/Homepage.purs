@@ -11,8 +11,8 @@ import App.Data.RootReducer (LiftedAction, reducer)
 import App.Data.Types (DogState(..), State)
 import App.Data.CountingReducer (Counting(..))
 import App.Data.LoginReducer (Login(..))
-import Puredux (liftAction')
-import Puredux.Connect
+import Radox (lift)
+import Radox.ReactConnect
 
 type HomepageProps
   = { title :: String }
@@ -25,7 +25,7 @@ homepage = React.component "homepage" component
                  , render: reducer.connect this render 
                  }
 
-render :: PureduxRenderMethod HomepageProps State {} LiftedAction
+render :: ReactRadoxRenderMethod HomepageProps State {} LiftedAction
 render all@{ dispatch, state, props } =
   RDom.div [] [ iterator dispatch state
               , login dispatch state
@@ -34,7 +34,7 @@ render all@{ dispatch, state, props } =
 
 iterator :: (LiftedAction -> Effect Unit) -> State -> React.ReactElement
 iterator dispatch state 
-  = RDom.p [ Props.onClick (\_ -> dispatch (liftAction' Up)) ] 
+  = RDom.p [ Props.onClick (\_ -> dispatch (lift Up)) ] 
     [ RDom.text (show state.value) ] 
 
 login :: (LiftedAction -> Effect Unit) -> State -> React.ReactElement
@@ -49,7 +49,7 @@ login dispatch state
                   then
                     Action.login dispatch "Hello" "World"
                   else
-                    dispatch (liftAction' Logout)) 
+                    dispatch (lift Logout)) 
           ] 
           [ RDom.text (if state.loggedIn then "Logout" else "Login" )] 
     label 

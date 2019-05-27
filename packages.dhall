@@ -116,6 +116,17 @@ let upstream =
 
 let overrides = {=}
 
-let additions = {=}
+let additions =
+  { radox =
+       mkPackage
+         [ "prelude"
+         , "console"
+         , "effect"
+         , "variant"
+         , "refs"
+         ]
+         "https://github.com/danieljharvey/purescript-radox.git"
+         "v0.0.4"
+  }
 
 in  upstream // overrides // additions

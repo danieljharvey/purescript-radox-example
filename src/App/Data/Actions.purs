@@ -1,6 +1,6 @@
 module App.Data.Action where
 
-import Prelude
+import Prelude (Unit, bind, discard, pure, unit, ($))
 import Data.Either (Either(..))
 import Data.Argonaut.Decode (decodeJson)
 import Effect (Effect)
@@ -15,7 +15,7 @@ import App.Data.RootReducer (LiftedAction)
 import App.Data.DogReducer (Dogs(..))
 import App.Data.LoginReducer (Login(..))
 import App.Data.Types (DogResponse)
-import Puredux (liftAction')
+import Radox
 
 endpoint :: String
 endpoint = "https://dog.ceo/api/breeds/image/random"
@@ -29,18 +29,18 @@ endpoint = "https://dog.ceo/api/breeds/image/random"
 -- this gets a nice dog picture
 fetchImage :: (LiftedAction -> Effect Unit) -> Effect Unit
 fetchImage dispatch = do
-  dispatch (liftAction' LoadNewDog)
+  dispatch (lift LoadNewDog)
   _ <- launchAff $ do
     res1 <- AX.get ResponseFormat.json endpoint
     case res1.body of
       Left err 
-        -> liftEffect $ dispatch (liftAction' $ DogError (AX.printResponseFormatError err))
+        -> liftEffect $ dispatch (lift $ DogError (AX.printResponseFormatError err))
       Right json 
         -> case (decodeJson json :: Either String DogResponse) of
              Left e 
-                -> liftEffect $ dispatch (liftAction' $ DogError e)
+                -> liftEffect $ dispatch (lift $ DogError e)
              Right dog
-                -> liftEffect $ dispatch (liftAction' (GotNewDog dog.message)) 
+                -> liftEffect $ dispatch (lift (GotNewDog dog.message)) 
   pure unit
 
 -- this does a mock login
@@ -52,6 +52,6 @@ login
   -> String
   -> Effect Unit
 login dispatch username password = do
-  dispatch (liftAction' (StartLogin username password))
-  _ <- setTimeout 2000 (dispatch (liftAction' LoginSuccess))
+  dispatch (lift (StartLogin username password))
+  _ <- setTimeout 2000 (dispatch (lift LoginSuccess))
   pure unit

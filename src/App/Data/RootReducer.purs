@@ -5,8 +5,8 @@ import App.Data.Types (State, defaultState)
 import App.Data.LoginReducer (Login, loginReducer)
 import App.Data.CountingReducer (Counting, countReducer)
 import App.Data.DogReducer (Dogs, dogReducer)
-import Puredux.Internal.Types
-import Puredux.Connect (Puredux, createPuredux)
+import Radox
+import Radox.ReactConnect
 
 type LiftedAction 
   = Variant ( login :: Login
@@ -26,5 +26,5 @@ rootReducer s action' =
     , dogs:     \action -> dogReducer action s
     } action'
 
-reducer :: Puredux LiftedAction State
-reducer = createPuredux rootReducer defaultState
+reducer :: ReactRadoxContext LiftedAction State
+reducer = createRadoxContext rootReducer defaultState
