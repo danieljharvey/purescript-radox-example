@@ -6,7 +6,7 @@ import React.DOM.Props as Props
 import React as React
 import React.DOM as RDom
 
-import App.Data.Action (fetchImage)
+import App.Data.Action (fetchImage, login) as Action
 import App.Data.RootReducer (LiftedAction, reducer)
 import App.Data.Types (DogState(..), State)
 import App.Data.CountingReducer (Counting(..))
@@ -47,7 +47,7 @@ login dispatch state
               -> do
                 if state.loggedIn == false
                   then
-                    dispatch (liftAction' $ StartLogin "Hello" "World")
+                    Action.login dispatch "Hello" "World"
                   else
                     dispatch (liftAction' Logout)) 
           ] 
@@ -67,7 +67,7 @@ dogPicture dispatch state
   where
     fetchButton
       = RDom.button
-          [ Props.onClick (\_ -> fetchImage dispatch) ]
+          [ Props.onClick (\_ -> Action.fetchImage dispatch) ]
           [ RDom.text "fetch!" ]
     image
       = case state.dog of

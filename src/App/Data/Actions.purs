@@ -6,11 +6,14 @@ import Data.Argonaut.Decode (decodeJson)
 import Effect (Effect)
 import Effect.Aff (launchAff)
 import Effect.Class (liftEffect)
+import Effect.Timer (setTimeout)
+
 import Affjax as AX
 import Affjax.ResponseFormat as ResponseFormat
 
 import App.Data.RootReducer (LiftedAction)
 import App.Data.DogReducer (Dogs(..))
+import App.Data.LoginReducer (Login(..))
 import App.Data.Types (DogResponse)
 import Puredux (liftAction')
 
@@ -31,4 +34,15 @@ fetchImage dispatch = do
                 -> liftEffect $ dispatch (liftAction' $ DogError e)
              Right dog
                 -> liftEffect $ dispatch (liftAction' (GotNewDog dog.message)) 
-  pure unit     
+  pure unit
+
+
+login 
+  :: (LiftedAction -> Effect Unit)
+  -> String
+  -> String
+  -> Effect Unit
+login dispatch username password = do
+  dispatch (liftAction' (StartLogin username password))
+  _ <- setTimeout 2000 (dispatch (liftAction' LoginSuccess))
+  pure unit

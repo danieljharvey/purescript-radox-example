@@ -3,17 +3,15 @@ module Puredux.Internal.Types where
 import Prelude
 import Effect (Effect)
 
-type Reducer allActionType actionType stateType
-  =  (allActionType -> Effect Unit)
-  -> actionType
+type Reducer actionType stateType
+  =  actionType
   -> stateType
-  -> Effect stateType
+  -> stateType
 
 type CombinedReducer actionType stateType
-  =  (actionType -> Effect Unit)
-  -> stateType
+  =  stateType
   -> actionType
-  -> Effect stateType
+  -> stateType
 
 type Listeners stateType
   = Array (stateType -> Effect Unit)

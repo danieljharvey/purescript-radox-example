@@ -19,11 +19,11 @@ type LiftedAction
 -- this means we can only have one reducer per action type
 rootReducer 
   :: CombinedReducer LiftedAction State
-rootReducer dispatch s action' =
+rootReducer s action' =
   match
-    { login:    \action -> loginReducer dispatch action s
-    , counting: \action -> countReducer dispatch action s
-    , dogs:     \action -> dogReducer dispatch action s
+    { login:    \action -> loginReducer action s
+    , counting: \action -> countReducer action s
+    , dogs:     \action -> dogReducer action s
     } action'
 
 reducer :: Puredux LiftedAction State

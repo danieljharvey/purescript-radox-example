@@ -1,7 +1,5 @@
 module App.Data.DogReducer where
 
-import Prelude (pure, ($))
-import Data.Variant (Variant)
 
 import App.Data.Types (DogState(..), State)
 import Puredux.Internal.Types
@@ -14,14 +12,11 @@ data Dogs
 
 instance hasLabelDogs :: HasLabel Dogs "dogs"
 
-type DogAction r
-  = Variant (dogs :: Dogs | r)
-
 dogReducer 
-  :: forall r. Reducer (DogAction r) Dogs State 
-dogReducer _ LoadNewDog s
-  = pure $ s { dog = LookingForADog }
-dogReducer _ (GotNewDog url) s
-  = pure $ s { dog = (FoundADog url) }
-dogReducer _ (DogError e) s
-  = pure $ s { dog = CouldNotFindADog } 
+  :: Reducer Dogs State 
+dogReducer LoadNewDog s
+  = s { dog = LookingForADog }
+dogReducer (GotNewDog url) s
+  = s { dog = (FoundADog url) }
+dogReducer (DogError e) s
+  = s { dog = CouldNotFindADog } 

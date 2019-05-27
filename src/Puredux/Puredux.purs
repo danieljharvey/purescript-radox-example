@@ -42,10 +42,9 @@ update
 update stateRef listeners reducers action = do
   -- read current state
   oldState <- read stateRef
-  -- create a dispatcher for the reducers to use
   let dispatch = update stateRef listeners reducers
   -- calculate new state
-  newState <- reducers dispatch oldState action
+  let newState = reducers oldState action
   -- announce new state to listeners
   _ <- traverse (\f -> f newState) listeners
   -- save new state
