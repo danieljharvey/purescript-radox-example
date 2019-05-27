@@ -1,8 +1,5 @@
 module App.Data.Types where
 
-import Data.Argonaut (class DecodeJson)
-import Data.Generic.Rep
-import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
 
 -- an example state type
 type State
@@ -28,13 +25,7 @@ defaultState
 
 --- Dog CEO return type
 
-newtype DogResponse
-  = DogResponse 
-      { status  :: String
-      , message :: String
-      }
-
-derive instance genericDogResponse :: Generic DogResponse _
-
-instance decodeJsonDogResponse :: DecodeJson DogResponse where
-  decodeJson = genericDecodeJson 
+type DogResponse
+  = { status  :: String
+    , message :: String
+    }

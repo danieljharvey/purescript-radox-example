@@ -19,7 +19,7 @@ createStore
   -> Effect (Store actionType stateType)
 createStore state listeners reducers = do
   stateRef <- new state
-  pure $ { dispatch: (update stateRef listeners reducers)
+  pure $ { dispatch: update stateRef listeners reducers
          , getState: (getState stateRef)
          }
 

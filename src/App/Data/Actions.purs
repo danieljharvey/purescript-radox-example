@@ -1,6 +1,6 @@
 module App.Data.Action where
 
-import Prelude (Unit, bind, discard, pure, unit, ($))
+import Prelude
 import Data.Either (Either(..))
 import Data.Argonaut.Decode (decodeJson)
 import Effect (Effect)
@@ -11,8 +11,8 @@ import Affjax.ResponseFormat as ResponseFormat
 
 import App.Data.RootReducer (LiftedAction)
 import App.Data.DogReducer (Dogs(..))
-import App.Data.Types (DogResponse(..))
-import Puredux
+import App.Data.Types (DogResponse)
+import Puredux (liftAction')
 
 endpoint :: String
 endpoint = "https://dog.ceo/api/breeds/image/random"
@@ -26,9 +26,9 @@ fetchImage dispatch = do
       Left err 
         -> liftEffect $ dispatch (liftAction' $ DogError (AX.printResponseFormatError err))
       Right json 
-        -> case decodeJson json of
+        -> case (decodeJson json :: Either String DogResponse) of
              Left e 
                 -> liftEffect $ dispatch (liftAction' $ DogError e)
-             Right (DogResponse dog)
+             Right dog
                 -> liftEffect $ dispatch (liftAction' (GotNewDog dog.message)) 
   pure unit     
