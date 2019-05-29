@@ -12,7 +12,7 @@ import App.Data.Types (DogState(..), State)
 import App.Data.CountingReducer (Counting(..))
 import App.Data.LoginReducer (Login(..))
 import Radox (lift)
-import Radox.ReactConnect
+import Radox.React
 
 type HomepageProps
   = { title :: String }

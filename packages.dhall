@@ -127,6 +127,16 @@ let additions =
          ]
          "https://github.com/danieljharvey/purescript-radox.git"
          "v0.0.4"
+  , react-radox =
+      mkPackage
+        [ "prelude"
+        , "console"
+        , "effect"
+        , "radox"
+        , "react"
+        ]
+        "https://github.com/danieljharvey/purescript-react-radox.git"
+        "v0.0.1"
   }
 
 in  upstream // overrides // additions

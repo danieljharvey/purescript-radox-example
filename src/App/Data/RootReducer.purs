@@ -6,7 +6,7 @@ import App.Data.LoginReducer (Login, loginReducer)
 import App.Data.CountingReducer (Counting, countReducer)
 import App.Data.DogReducer (Dogs, dogReducer)
 import Radox
-import Radox.ReactConnect
+import Radox.React
 
 type LiftedAction 
   = Variant ( login :: Login
