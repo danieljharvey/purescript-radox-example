@@ -136,7 +136,7 @@ let additions =
         , "react"
         ]
         "https://github.com/danieljharvey/purescript-react-radox.git"
-        "v0.0.1"
+        "v0.0.2"
   }
 
 in  upstream // overrides // additions

@@ -22,7 +22,7 @@ homepage = React.component "homepage" component
   where
     component this = do
           pure $ { state: { }
-                 , render: reducer.connect this render 
+                 , render: reducer.consumer this render 
                  }
 
 render :: ReactRadoxRenderMethod HomepageProps State {} LiftedAction
