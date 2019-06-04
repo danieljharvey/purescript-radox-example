@@ -126,7 +126,7 @@ let additions =
          , "refs"
          ]
          "https://github.com/danieljharvey/purescript-radox.git"
-         "v0.0.4"
+         "v0.0.7"
   , react-radox =
       mkPackage
         [ "prelude"
@@ -136,7 +136,7 @@ let additions =
         , "react"
         ]
         "https://github.com/danieljharvey/purescript-react-radox.git"
-        "v0.0.2"
+        "v0.0.3"
   }
 
 in  upstream // overrides // additions
