@@ -1,6 +1,6 @@
 module App.Components.Homepage where
 
-import Prelude (Unit, otherwise, pure, show, ($), (==))
+import Prelude
 import Effect (Effect)
 import React.DOM.Props as Props
 import React as React
@@ -29,7 +29,27 @@ render all@{ dispatch, state, props } =
   RDom.div [] [ iterator dispatch state
               , login dispatch state
               , dogPicture dispatch state
+              , React.createLeafElement fireEventFirstTime 
+                  { dispatch: dispatch
+                  , action: lift $ Up
+                  } 
               ]
+
+type FireProps
+  = { dispatch :: LiftedAction -> Effect Unit
+    , action   :: LiftedAction
+    }
+
+fireEventFirstTime :: React.ReactClass FireProps
+fireEventFirstTime = React.component "fire" component
+  where
+    component this = do
+       pure $ { state: { }
+              , componentDidMount: do
+                  props <- React.getProps this
+                  props.dispatch props.action
+              , render: pure mempty
+              }
 
 iterator :: (LiftedAction -> Effect Unit) -> State -> React.ReactElement
 iterator dispatch state 
