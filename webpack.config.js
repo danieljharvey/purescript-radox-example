@@ -1,13 +1,5 @@
 'use strict';
 
-const { execSync } = require('child_process');
-const os = require('os');
-
-const getSpagoSources = function() {
-  return execSync('spago sources').toString().split(os.EOL).filter(a => a.length > 3)
-}
-
-const spagoSources = getSpagoSources()
 
 module.exports = {
   entry: './src/App',
@@ -34,9 +26,9 @@ module.exports = {
         loader: 'purs-loader',
         options: {
           src: [
-            ...spagoSources,
             'src/**/*.purs'
           ],
+          spago: true,
           pscIde: true
         }
       }
