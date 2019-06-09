@@ -1,6 +1,6 @@
-module App.Data.Action where
+module App.Data.Actions where
 
-import Prelude (Unit, bind, discard, pure, unit, ($))
+import Prelude (Unit, bind, pure, unit, ($))
 import Data.Either (Either(..))
 import Data.Argonaut.Decode (decodeJson)
 import Effect (Effect)
@@ -11,17 +11,13 @@ import Effect.Timer (setTimeout)
 import Affjax as AX
 import Affjax.ResponseFormat as ResponseFormat
 
-import App.Data.RootReducer (LiftedAction)
-import App.Data.DogReducer (Dogs(..))
-import App.Data.LoginReducer (Login(..))
+import App.Data.ActionTypes (Dogs(..), LiftedAction, Login(..))
 import App.Data.Types (DogResponse)
 import Radox
 
 endpoint :: String
 endpoint = "https://dog.ceo/api/breeds/image/random"
 
--- we've avoided having our reducers doing any side effects,
--- so how do we *do* things?
 -- since we are able to do Effect things in event handlers
 -- let's make Actions that take the dispatch function and use it
 -- to save things in the store as we go
@@ -29,7 +25,6 @@ endpoint = "https://dog.ceo/api/breeds/image/random"
 -- this gets a nice dog picture
 fetchImage :: (LiftedAction -> Effect Unit) -> Effect Unit
 fetchImage dispatch = do
-  dispatch (lift LoadNewDog)
   _ <- launchAff $ do
     res1 <- AX.get ResponseFormat.json endpoint
     case res1.body of
@@ -52,6 +47,5 @@ login
   -> String
   -> Effect Unit
 login dispatch username password = do
-  dispatch (lift (StartLogin username password))
   _ <- setTimeout 2000 (dispatch (lift LoginSuccess))
   pure unit

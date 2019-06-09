@@ -6,11 +6,10 @@ import React.DOM.Props as Props
 import React as React
 import React.DOM as RDom
 
-import App.Data.Action (fetchImage, login) as Action
-import App.Data.RootReducer (LiftedAction, reducer)
+import App.Data.Actions (login) as Action
+import App.Data.ActionTypes (Counting(..), Dogs(..), LiftedAction, Login(..))
+import App.Data.RootReducer (reducer)
 import App.Data.Types (DogState(..), State)
-import App.Data.CountingReducer (Counting(..))
-import App.Data.LoginReducer (Login(..))
 import Radox (lift)
 import Radox.React
 
@@ -67,7 +66,7 @@ dogPicture dispatch state
   where
     fetchButton
       = RDom.button
-          [ Props.onClick (\_ -> Action.fetchImage dispatch) ]
+          [ Props.onClick (\_ -> dispatch $ lift $ LoadNewDog ) ]
           [ RDom.text "fetch!" ]
     image
       = case state.dog of

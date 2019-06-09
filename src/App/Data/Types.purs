@@ -29,3 +29,5 @@ type DogResponse
   = { status  :: String
     , message :: String
     }
+
+

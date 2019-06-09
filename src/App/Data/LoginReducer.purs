@@ -1,21 +1,19 @@
 module App.Data.LoginReducer where
 
+import Prelude (discard, pure, ($))
+import App.Data.Actions (login)
 import App.Data.Types (State)
+import App.Data.ActionTypes (LiftedAction, Login(..))
 import Radox
 
--- here are our first actions
-data Login
-  = StartLogin String String
-  | Logout
-  | LoginSuccess
-
-instance hasLabelLogin :: HasLabel Login "login" 
-
 loginReducer 
-  :: Reducer Login State 
-loginReducer (StartLogin _ _) s =
-  s { loggedIn = false, loggingIn = true }
-loginReducer Logout s
-  = s { loggedIn = false, loggingIn = false }
-loginReducer LoginSuccess s
-  = s { loggedIn = true, loggingIn = false }
+  :: EffectfulReducer Login State LiftedAction
+loginReducer { dispatch } action state
+  = case action of
+       StartLogin username password -> do
+          login dispatch username password
+          pure $ state { loggedIn = false, loggingIn = true }
+       Logout ->
+          pure $ state { loggedIn = false, loggingIn = false }
+       LoginSuccess ->
+          pure $ state { loggedIn = true, loggingIn = false }

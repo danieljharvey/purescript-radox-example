@@ -1,29 +1,28 @@
 module App.Data.RootReducer where
 
-import Data.Variant (Variant, match)
+import Prelude (pure, ($))
+import Data.Variant (match)
+import App.Data.ActionTypes (LiftedAction)
 import App.Data.Types (State, defaultState)
-import App.Data.LoginReducer (Login, loginReducer)
-import App.Data.CountingReducer (Counting, countReducer)
-import App.Data.DogReducer (Dogs, dogReducer)
+import App.Data.LoginReducer (loginReducer)
+import App.Data.CountingReducer (countReducer)
+import App.Data.DogReducer (dogReducer)
 import Radox (CombinedReducer)
 import Radox.React
-
-type LiftedAction 
-  = Variant ( login :: Login
-            , counting :: Counting
-            , dogs :: Dogs
-            )
 
 -- This runs an action through whichever reducer makes sense
 -- @match@ uses exhaustiveness checking so we must check for every type
 -- this means we can only have one reducer per action type
 rootReducer 
   :: CombinedReducer LiftedAction State
-rootReducer s action' =
+rootReducer helpers state action' =
   match
-    { login:    \action -> loginReducer action s
-    , counting: \action -> countReducer action s
-    , dogs:     \action -> dogReducer action s
+    { login:    \action -> 
+                  loginReducer helpers action state
+    , counting: \action -> 
+                  pure $ countReducer action state
+    , dogs:     \action -> 
+                  dogReducer helpers action state
     } action'
 
 reducer :: ReactRadoxContext LiftedAction State
