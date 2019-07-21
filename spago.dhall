@@ -7,7 +7,7 @@ You can edit this file as you like.
 , dependencies =
     [ "effect", "console", "psci-support", "js-timers", "react", "react-dom",
 "web-html", "variant", "debug", "argonaut", "affjax", "generics-rep",
-"argonaut-generic", "radox", "react-radox" ]
+"argonaut-generic", "radox", "react-radox", "styling" ]
 , packages =
     ./packages.dhall
 }
