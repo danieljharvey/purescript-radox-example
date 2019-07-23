@@ -1,17 +1,18 @@
 module App.Components.Iterator where
 
-import Prelude (Unit, bind, pure, show, ($), (-), (<), (<>))
+import Prelude (Unit, bind, map, pure, show, ($), (-), (<), (<>))
 import Data.Array (intercalate)
-import Data.Functor (map)
 import Effect (Effect)
 import React.DOM.Props as Props
 import React as React
 import React.DOM as RDom
 
+import StyleProvider
+
 import App.Data.ActionTypes (Counting(..), LiftedAction)
 import Radox (lift)
 
-import PursUI (CSSRuleSet, CSSSelector(..), PursUI, addStyle, createBlankStyleSheet, fun, str)
+import PursUI (CSSRuleSet, CSSSelector(..), fun, str)
 
 type IteratorProps
   = { value :: Int
@@ -39,17 +40,15 @@ iterator
 iterator = React.component "iterator" component
   where
     component this = do
-      (stylesheet :: PursUI "dogshit") <- createBlankStyleSheet 
       pure $ { state: {}
              , render: do
                 props <- React.getProps this
-                classes <- addStyle stylesheet iteratorStyle props
-                pure (renderIter classes props)
+                pure $ styleContext.consumer props {} iteratorStyle renderIter
              }
 
-    renderIter classes props
+    renderIter { classNames, props }
       = RDom.p 
-          [ Props.className (toClassNames classes)
+          [ Props.className (toClassNames classNames)
           , Props.onClick (\_ -> props.dispatch (lift Up)) 
           ] 
           [ RDom.text (show props.value) ] 

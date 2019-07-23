@@ -16,7 +16,9 @@ import React as React
 import ReactDOM as ReactDOM
 
 import App.Data.RootReducer (reducer)
-import App.Components.Homepage
+import App.Components.Homepage (homepage)
+
+import StyleProvider
 
 main :: Effect Unit
 main = void $ do
@@ -44,5 +46,7 @@ app = React.component "Main" component
                }
     render'  
       = React.createLeafElement reducer.provider
-          { children: [ React.createLeafElement homepage { title: "Hello!" } ] }
-        
+          { children: [ React.createLeafElement styleContext.provider
+                          { children: [ React.createLeafElement homepage { title: "Hello!" } ] }
+                      ]
+          }

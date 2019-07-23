@@ -1,6 +1,6 @@
 module App.Components.Login where
 
-import Prelude (Unit, bind, otherwise, pure, ($), (<>), (==))
+import Prelude
 import Effect (Effect)
 import Data.Array (intercalate)
 import Data.Functor (map)
@@ -13,8 +13,8 @@ import App.Data.ActionTypes (LiftedAction, Login(..))
 import Radox (lift)
 
 import App.Components.Styled.Div (div)
-
-import PursUI 
+import StyleProvider
+import PursUI (CSSRuleSet, CSSSelector(..), fun, str) 
 
 type LoginProps
   = { loggedIn :: Boolean
@@ -78,19 +78,18 @@ login :: React.ReactClass LoginProps
 login = React.component "login" component
   where
     component this = do
-          (stylesheet :: PursUI "poo2") <- createBlankStyleSheet 
           pure $ { state: { }
                  , render: do
                     props <- React.getProps this
-                    classes <- addStyle stylesheet loginStyle props
-                    pure (renderLogin classes props)
+                    pure $ styleContext.consumer props {} loginStyle renderLogin
                  }
-    renderLogin classes props
+
+    renderLogin { classNames, props }
      = greyBox {} [ button, label ]
       where
         button 
           = RDom.button 
-              [ Props.className (toClassNames classes)
+              [ Props.className (toClassNames classNames)
               , Props.onClick (\_ 
                   -> do
                     if props.loggedIn == false
