@@ -1,6 +1,6 @@
 module App.Data.DogReducer where
 
-import Prelude (discard, pure, ($))
+import Prelude (($))
 import App.Data.Actions (fetchImage)
 import App.Data.ActionTypes (Dogs(..), LiftedAction)
 import App.Data.Types (DogState(..), State)
@@ -17,9 +17,10 @@ dogReducer { dispatch } action state
   = case action of
       LoadNewDog 
         -> do
-          fetchImage dispatch
-          pure $ state { dog = LookingForADog }
+            let newAction = fetchImage dispatch
+                newState = state { dog = LookingForADog }
+            UpdateStateAndRunEffect newState newAction
       GotNewDog url
-        -> pure $ state { dog = (FoundADog url) }
+        -> UpdateState $ state { dog = (FoundADog url) }
       DogError e
-        -> pure $ state { dog = CouldNotFindADog } 
+        -> UpdateState $ state { dog = CouldNotFindADog } 

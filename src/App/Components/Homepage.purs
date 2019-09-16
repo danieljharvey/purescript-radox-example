@@ -2,6 +2,7 @@ module App.Components.Homepage where
 
 import Prelude (Unit, otherwise, pure, show, ($), (==))
 import Effect (Effect)
+import Effect.Aff (launchAff_)
 import React.DOM.Props as Props
 import React as React
 import React.DOM as RDom
@@ -46,7 +47,7 @@ login dispatch state
               -> do
                 if state.loggedIn == false
                   then
-                    Action.login dispatch "Hello" "World"
+                    launchAff_ $ Action.login dispatch "Hello" "World"
                   else
                     dispatch (lift Logout)) 
           ] 

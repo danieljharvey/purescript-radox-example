@@ -1,32 +1,11 @@
 let mkPackage =
-      https://raw.githubusercontent.com/purescript/package-sets/psc-0.12.5-20190508/src/mkPackage.dhall sha256:0b197efa1d397ace6eb46b243ff2d73a3da5638d8d0ac8473e8e4a8fc528cf57
+      https://raw.githubusercontent.com/purescript/package-sets/psc-0.13.3-20190831/src/mkPackage.dhall sha256:0b197efa1d397ace6eb46b243ff2d73a3da5638d8d0ac8473e8e4a8fc528cf57
 
 let upstream =
-      https://raw.githubusercontent.com/purescript/package-sets/psc-0.12.5-20190508/src/packages.dhall sha256:8ef3a6d6d123e05933997426da68ef07289e1cbbdd2a844b5d10c9159deef65a
+      https://raw.githubusercontent.com/purescript/package-sets/psc-0.13.3-20190831/src/packages.dhall sha256:852cd4b9e463258baf4e253e8524bcfe019124769472ca50b316fe93217c3a47
 
 let overrides = {=}
 
-let additions =
-  { radox =
-       mkPackage
-         [ "prelude"
-         , "console"
-         , "effect"
-         , "variant"
-         , "refs"
-         ]
-         "https://github.com/danieljharvey/purescript-radox.git"
-         "v0.0.8"
-  , react-radox =
-      mkPackage
-        [ "prelude"
-        , "console"
-        , "effect"
-        , "radox"
-        , "react"
-        ]
-        "https://github.com/danieljharvey/purescript-react-radox.git"
-        "v0.0.4"
-  }
+let additions = {=}
 
 in  upstream // overrides // additions
