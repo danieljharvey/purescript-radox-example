@@ -4,7 +4,17 @@ let mkPackage =
 let upstream =
       https://raw.githubusercontent.com/purescript/package-sets/psc-0.13.3-20190831/src/packages.dhall sha256:852cd4b9e463258baf4e253e8524bcfe019124769472ca50b316fe93217c3a47
 
-let overrides = {=}
+let overrides = { radox =
+    mkPackage
+      [ "prelude"
+      , "console"
+      , "effect"
+      , "variant"
+      , "refs"
+      ]
+      "https://github.com/danieljharvey/purescript-radox.git"
+      "v1.0.0"
+  }
 
 let additions = {=}
 
