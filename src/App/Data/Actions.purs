@@ -4,7 +4,7 @@ import Prelude (Unit, bind, pure, unit, ($))
 import Data.Either (Either(..))
 import Data.Argonaut.Decode (decodeJson)
 import Effect (Effect)
-import Effect.Aff (launchAff)
+import Effect.Aff (Aff) 
 import Effect.Class (liftEffect)
 import Effect.Timer (setTimeout)
 
@@ -23,20 +23,18 @@ endpoint = "https://dog.ceo/api/breeds/image/random"
 -- to save things in the store as we go
 
 -- this gets a nice dog picture
-fetchImage :: (LiftedAction -> Effect Unit) -> Effect Unit
+fetchImage :: (LiftedAction -> Effect Unit) -> Aff Unit
 fetchImage dispatch = do
-  _ <- launchAff $ do
-    res1 <- AX.get ResponseFormat.json endpoint
-    case res1.body of
-      Left err 
-        -> liftEffect $ dispatch (lift $ DogError (AX.printResponseFormatError err))
-      Right json 
-        -> case (decodeJson json :: Either String DogResponse) of
-             Left e 
-                -> liftEffect $ dispatch (lift $ DogError e)
-             Right dog
-                -> liftEffect $ dispatch (lift (GotNewDog dog.message)) 
-  pure unit
+  res1 <- AX.get ResponseFormat.json endpoint
+  case res1.body of
+    Left err 
+      -> liftEffect $ dispatch (lift $ DogError (AX.printResponseFormatError err))
+    Right json 
+      -> case (decodeJson json :: Either String DogResponse) of
+           Left e 
+              -> liftEffect $ dispatch (lift $ DogError e)
+           Right dog
+              -> liftEffect $ dispatch (lift (GotNewDog dog.message)) 
 
 -- this does a mock login
 -- demonstrating we don't need Aff if we don't want to
@@ -45,7 +43,7 @@ login
   :: (LiftedAction -> Effect Unit)
   -> String
   -> String
-  -> Effect Unit
+  -> Aff Unit
 login dispatch username password = do
-  _ <- setTimeout 2000 (dispatch (lift LoginSuccess))
+  _ <- liftEffect $ setTimeout 2000 (dispatch (lift LoginSuccess))
   pure unit

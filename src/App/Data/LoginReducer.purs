@@ -1,6 +1,6 @@
 module App.Data.LoginReducer where
 
-import Prelude (discard, pure, ($))
+import Prelude (($))
 import App.Data.Actions (login)
 import App.Data.Types (State)
 import App.Data.ActionTypes (LiftedAction, Login(..))
@@ -11,9 +11,11 @@ loginReducer
 loginReducer { dispatch } action state
   = case action of
        StartLogin username password -> do
-          login dispatch username password
-          pure $ state { loggedIn = false, loggingIn = true }
+          let newAction = login dispatch username password
+          let newState = state { loggedIn = false, loggingIn = true }
+          UpdateStateAndRunEffect newState newAction
+
        Logout ->
-          pure $ state { loggedIn = false, loggingIn = false }
+          UpdateState $ state { loggedIn = false, loggingIn = false }
        LoginSuccess ->
-          pure $ state { loggedIn = true, loggingIn = false }
+          UpdateState $ state { loggedIn = true, loggingIn = false }

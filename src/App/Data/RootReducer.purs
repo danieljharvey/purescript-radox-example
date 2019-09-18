@@ -1,13 +1,13 @@
 module App.Data.RootReducer where
 
-import Prelude (pure, ($))
+import Prelude (($))
 import Data.Variant (match)
 import App.Data.ActionTypes (LiftedAction)
 import App.Data.Types (State, defaultState)
 import App.Data.LoginReducer (loginReducer)
 import App.Data.CountingReducer (countReducer)
 import App.Data.DogReducer (dogReducer)
-import Radox (CombinedReducer)
+import Radox (CombinedReducer, ReducerReturn(..)) 
 import Radox.React
 
 -- This runs an action through whichever reducer makes sense
@@ -20,7 +20,7 @@ rootReducer helpers state action' =
     { login:    \action -> 
                   loginReducer helpers action state
     , counting: \action -> 
-                  pure $ countReducer action state
+                  UpdateState $ countReducer action state
     , dogs:     \action -> 
                   dogReducer helpers action state
     } action'
